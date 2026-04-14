@@ -1,0 +1,161 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* 60% Dominant - Deep Pitch Black */
+  --void: #000000;
+  --void-soft: #0a0a0a;
+  --void-lighter: #141414;
+  
+  /* 30% Secondary - Stark White */
+  --stark: #ffffff;
+  --stark-dim: #e5e5e5;
+  --stark-muted: #a3a3a3;
+  
+  /* 10% Accent - Acid Yellow */
+  --acid: #DFFF00;
+  --acid-glow: #E6FF26;
+  --acid-dim: #B3CC00;
+  
+  /* Theme tokens mapped to our palette */
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --card-foreground: #ffffff;
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
+  --primary: #DFFF00;
+  --primary-foreground: #000000;
+  --secondary: #141414;
+  --secondary-foreground: #ffffff;
+  --muted: #141414;
+  --muted-foreground: #a3a3a3;
+  --accent: #DFFF00;
+  --accent-foreground: #000000;
+  --destructive: #ff3333;
+  --destructive-foreground: #ffffff;
+  --border: #1f1f1f;
+  --input: #1f1f1f;
+  --ring: #DFFF00;
+  --radius: 0rem;
+  
+  /* Chart colors using acid yellow variations */
+  --chart-1: #DFFF00;
+  --chart-2: #ffffff;
+  --chart-3: #B3CC00;
+  --chart-4: #e5e5e5;
+  --chart-5: #E6FF26;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
+  
+  /* Colors */
+  --color-void: var(--void);
+  --color-void-soft: var(--void-soft);
+  --color-void-lighter: var(--void-lighter);
+  --color-stark: var(--stark);
+  --color-stark-dim: var(--stark-dim);
+  --color-stark-muted: var(--stark-muted);
+  --color-acid: var(--acid);
+  --color-acid-glow: var(--acid-glow);
+  --color-acid-dim: var(--acid-dim);
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .text-acid-glow {
+    text-shadow: 0 0 20px var(--acid), 0 0 40px var(--acid-dim);
+  }
+  
+  .box-acid-glow {
+    box-shadow: 0 0 20px var(--acid), 0 0 40px var(--acid-dim);
+  }
+  
+  .border-acid-glow {
+    box-shadow: inset 0 0 10px var(--acid-dim), 0 0 20px var(--acid);
+  }
+  
+  /* Brutalist typography */
+  .brutalist-display {
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+  }
+  
+  .brutalist-mono {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  
+  /* Geometric transitions */
+  .geometric-shift {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .geometric-shift:hover {
+    transform: skewX(-2deg) translateX(4px);
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Canvas styles */
+.canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
