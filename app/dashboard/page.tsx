@@ -5,9 +5,11 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useSimulation } from '@/hooks/use-simulation';
+import { useBackendStatus } from '@/hooks/use-backend-status';
 import { ControlPanel } from '@/components/simulation/ui/control-panel';
 import { TelemetryDisplay } from '@/components/simulation/ui/telemetry-display';
 import { GeometricPanel, GeometricDivider } from '@/components/simulation/ui/geometric-panel';
+import { ExportMenu } from '@/components/simulation/ui/export-menu';
 import { ArrowLeft, Maximize2, Grid3X3 } from 'lucide-react';
 
 // Dynamic import for canvas to avoid SSR issues
@@ -39,6 +41,8 @@ export default function DashboardPage() {
     reset,
     setParams,
   } = useSimulation();
+  
+  const backendStatus = useBackendStatus();
   
   // Load scenario params and auto-start simulation on mount
   useEffect(() => {
@@ -92,6 +96,23 @@ export default function DashboardPage() {
           </div>
           
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 px-3 py-1.5 border border-border">
+              <div className={`w-2 h-2 rounded-full ${backendStatus.available ? 'bg-green-500' : 'bg-red-500'}`} />
+              <span className="font-mono text-[10px] tracking-widest text-stark-dim uppercase">
+                {backendStatus.available ? 'Java Backend' : 'Client-Side'}
+              </span>
+            </div>
+            
+            <ExportMenu 
+              simulationState={{ 
+                vehicles, 
+                network, 
+                stats, 
+                params 
+              }}
+              scenarioName="simulation"
+            />
+            
             <Link
               href="/scenario"
               className="flex items-center gap-2 px-4 py-2 border border-border hover:border-acid text-stark-dim hover:text-acid transition-colors"
