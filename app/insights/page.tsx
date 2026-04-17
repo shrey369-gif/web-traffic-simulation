@@ -11,7 +11,7 @@ import { useSimulation } from '@/hooks/use-simulation';
 
 const TelemetryDisplay = dynamic(
   () => import('@/components/simulation/ui/telemetry-display').then(mod => mod.TelemetryDisplay),
-  { ssr: false }
+  { ssr: false, loading: () => <div className="h-64 bg-void-soft border border-border animate-pulse" /> }
 );
 
 export default function InsightsPage() {
@@ -35,10 +35,9 @@ export default function InsightsPage() {
         {
           timestamp: tick,
           vehicles: stats.totalVehicles,
-          violations: stats.signalViolations,
-          honks: stats.totalHonks,
-          speed: stats.averageSpeed,
-          congestion: stats.congestionNodes,
+          violations: stats.violations,
+          speed: stats.avgSpeed,
+          throughput: stats.throughput,
         }
       ]);
     }
@@ -86,7 +85,7 @@ export default function InsightsPage() {
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total Vehicles */}
-          <GeometricPanel className="p-4" variant="solid">
+          <GeometricPanel className="p-4">
             <div className="flex items-start justify-between">
               <div>
                 <div className="font-mono text-[10px] text-stark-muted uppercase tracking-widest mb-2">
@@ -106,14 +105,14 @@ export default function InsightsPage() {
           </GeometricPanel>
 
           {/* Signal Violations */}
-          <GeometricPanel className="p-4" variant="solid">
+          <GeometricPanel className="p-4">
             <div className="flex items-start justify-between">
               <div>
                 <div className="font-mono text-[10px] text-stark-muted uppercase tracking-widest mb-2">
                   Signal Violations
                 </div>
                 <div className="brutalist-display text-4xl text-acid font-mono font-bold tabular-nums">
-                  <AnimatedCounter end={stats.signalViolations} decimals={0} />
+                  <AnimatedCounter end={stats.violations} decimals={0} />
                 </div>
               </div>
               <motion.div
@@ -126,14 +125,15 @@ export default function InsightsPage() {
           </GeometricPanel>
 
           {/* Total Honks */}
-          <GeometricPanel className="p-4" variant="solid">
+          <GeometricPanel className="p-4">
             <div className="flex items-start justify-between">
               <div>
                 <div className="font-mono text-[10px] text-stark-muted uppercase tracking-widest mb-2">
-                  Total Honks
+                  Avg Speed
                 </div>
-                <div className="brutalist-display text-4xl text-stark font-mono font-bold tabular-nums">
-                  <AnimatedCounter end={Math.floor(stats.totalHonks)} decimals={0} />
+                <div className="brutalist-display text-3xl text-stark font-mono font-bold tabular-nums">
+                  {stats.avgSpeed.toFixed(1)}
+                  <span className="text-lg text-stark-dim ml-1">u/s</span>
                 </div>
               </div>
               <motion.div
@@ -144,33 +144,12 @@ export default function InsightsPage() {
               </motion.div>
             </div>
           </GeometricPanel>
-
-          {/* Average Speed */}
-          <GeometricPanel className="p-4" variant="solid">
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="font-mono text-[10px] text-stark-muted uppercase tracking-widest mb-2">
-                  Avg Speed
-                </div>
-                <div className="brutalist-display text-3xl text-stark font-mono font-bold tabular-nums">
-                  {stats.averageSpeed.toFixed(1)}
-                  <span className="text-lg text-stark-dim ml-1">km/h</span>
-                </div>
-              </div>
-              <motion.div
-                animate={{ x: [0, 4, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <TrendingUp className="w-5 h-5 text-stark-dim" />
-              </motion.div>
-            </div>
-          </GeometricPanel>
         </div>
 
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Telemetry Display */}
-          <GeometricPanel className="p-6" variant="solid">
+          <GeometricPanel className="p-6">
             <h2 className="font-mono text-xs tracking-widest text-stark uppercase mb-4">
               Live Telemetry
             </h2>
@@ -178,7 +157,7 @@ export default function InsightsPage() {
           </GeometricPanel>
 
           {/* Stress Indicator */}
-          <GeometricPanel className="p-6" variant="solid">
+          <GeometricPanel className="p-6">
             <h2 className="font-mono text-xs tracking-widest text-stark uppercase mb-4">
               Network Stress
             </h2>
@@ -205,13 +184,10 @@ export default function InsightsPage() {
               {/* Status text */}
               <div className="font-mono text-[10px] text-stark-muted space-y-1">
                 <div>
-                  Congested Nodes: <span className="text-stark">{stats.congestionNodes}</span>
+                  Throughput: <span className="text-stark">{stats.throughput}</span>
                 </div>
                 <div>
-                  Active Signals: <span className="text-stark">{stats.activeSignals}</span>
-                </div>
-                <div>
-                  Throughput: <span className="text-acid font-bold">{stats.throughput}</span>
+                  Avg Speed: <span className="text-acid font-bold">{stats.avgSpeed.toFixed(1)}</span>
                 </div>
               </div>
             </div>
